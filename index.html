@@ -9,10 +9,24 @@
 
 <body>
     <div id="app">
-        <input type="text" v-model="toDo" placeholder="Type here" />
-        <button v-on:click="AddToDo()">ADD</button>
+        <h1>To Do with Vue</h1>
+        <div v-if="!isEditing">
+            <input type="text" ref="input" v-model="toDo" placeholder="Type here" v-on:keyup.enter="AddToDo()"/>
+            <button type="submit" v-on:click="AddToDo()" >  <img src="https://raw.githubusercontent.com/Keyamoon/IcoMoon-Free/master/SVG/267-plus.svg"> ADD</button>
+        </div>
+
+        <div v-else>
+            <p>{{ selectedIndex +1}} -</p>
+            <input type="text" ref="input" v-model="toDo" placeholder="Type here" v-on:keyup.enter="UpdateToDo()"/>
+            <button type="submit" v-on:click="UpdateToDo()" >  <img src="https://raw.githubusercontent.com/Keyamoon/IcoMoon-Free/master/SVG/303-loop2.svg"> UPDATE </button>
+        </div>
+
         <ol>
-            <li v-for="toDo in toDos">{{toDo}}</li>
+            <li v-for="(toDo,index) in toDos">
+                {{toDo}}
+                <button v-on:click="EditToDo(index,toDo)"> <img src="https://raw.githubusercontent.com/Keyamoon/IcoMoon-Free/master/SVG/007-pencil2.svg"> Edit</button>
+                <button v-on:click="DeleteToDo(index)"> <img src="https://raw.githubusercontent.com/Keyamoon/IcoMoon-Free/master/SVG/174-bin2.svg"> Delete</button>
+            </li>
         </ol>
     </div>
 
@@ -23,17 +37,44 @@
         var app = new Vue({
             el: '#app',
             data: {
+                isEditing: false,
+                selectedIndex: null,
                 toDo: '',
                 toDos: [],
             },
             methods: {
-                SaveToDos: function () {
+                SaveToDos() {
                     localStorage.setItem("toDos", JSON.stringify(this.toDos))
                 },
-                AddToDo: function () {
+
+                AddToDo() {
                     this.toDos.push(this.toDo)
                     this.SaveToDos()
+                    this.toDo=''
+                    this.$refs.input.focus()
+                },
+
+                EditToDo(index,toDo) {
+                    this.toDo = toDo
+                    this.selectedIndex=index
+                    this.isEditing = true
+                    this.$refs.input.focus()
+                },
+
+                UpdateToDo(){
+                    this.toDos.splice(this.selectedIndex,1,this.toDo)
+                    this.SaveToDos()
+                    this.toDo=''
+                    this.isEditing=false
+                    this.$refs.input.focus()
+                },
+
+                DeleteToDo(index){
+                    this.toDos.splice(index,1)
+                    this.SaveToDos()
                 }
+
+
             },
             mounted() {
                 if (localStorage.getItem("toDos") != null) {
