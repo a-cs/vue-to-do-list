@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue To do</title>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model="toDo" placeholder="Type here" />
+        <button v-on:click="AddToDo()">ADD</button>
+        <ol>
+            <li v-for="toDo in toDos">{{toDo}}</li>
+        </ol>
+    </div>
+
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                toDo: '',
+                toDos: [],
+            },
+            methods: {
+                SaveToDos: function () {
+                    localStorage.setItem("toDos", JSON.stringify(this.toDos))
+                },
+                AddToDo: function () {
+                    this.toDos.push(this.toDo)
+                    this.SaveToDos()
+                }
+            },
+            mounted() {
+                if (localStorage.getItem("toDos") != null) {
+                    this.toDos = JSON.parse(localStorage.getItem("toDos"))
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>
