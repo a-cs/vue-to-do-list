@@ -1,0 +1,35 @@
+#app{
+    font-size: 25px;
+}
+
+h1{
+    font-size: 50px;
+}
+
+button{
+    background-color: white;
+    font-size: 25px;
+    border-color: lightblue;
+    border-radius: 5px;
+    margin: 1px;
+}
+
+button img{
+    background-color: white;
+    margin-right: 5px;
+    
+}
+
+li {
+    margin: 5px;
+    
+}
+
+input {
+    font-size: 25px;
+}
+
+input:focus{
+    border-color: lightskyblue;
+    border-width: 3px;
+}
